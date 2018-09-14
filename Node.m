@@ -3,7 +3,7 @@ classdef Node
     properties
         coords
         hasNeighbours = false
-        neighbours = []
+        neighbours = [] % location [x,y] ONLY
     end
     
     methods
