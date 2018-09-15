@@ -23,7 +23,8 @@ while numOfPts < n + 1
     randy = rand() * 30; % random y coordinate
     
     if inpolygon(randx, randy, x_obstacle, y_obstacle) == 0
-        plot(randx,randy,'b*');
+        %plot(randx,randy,'b*');
+        Node([randx,randy]).draw();
         numOfPts = numOfPts + 1;
         Nodes{numOfPts} = Node([randx, randy]); % first addition will be Nodes{2}
     
@@ -42,7 +43,8 @@ end
          pt_2 = Nodes{i2}.coords;    % second point
          
          if isempty(polyxpoly([pt_1(1) pt_2(1)],[pt_1(2) pt_2(2)], x_obstacle, y_obstacle))
-             plot([pt_1(1) pt_2(1)], [pt_1(2) pt_2(2)]) % plot the edge.
+             %plot([pt_1(1) pt_2(1)], [pt_1(2) pt_2(2)]) % plot the edge.*********
+             Edge(Node(pt_1),Node(pt_2)).draw();
              
              Nodes{i}.hasNeighbours = true; % obviously!!
              Nodes{i2}.hasNeighbours = true;

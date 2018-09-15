@@ -16,6 +16,10 @@ classdef Node
             neighbours = self.neighbours;
         end
         
+        function draw = draw(self)
+            draw = plot(self.coords(1), self.coords(2), 'b*');
+        end
+        
     end
 end
 

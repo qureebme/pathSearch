@@ -24,7 +24,7 @@ classdef Edge
             cost = self.getLength * self.cost;
         end
         
-        function draw = drawSelf(self)
+        function draw = draw(self)
             hold on
             X = [self.node1.coords(1) self.node2.coords(1)];
             Y = [self.node1.coords(2) self.node2.coords(2)];
