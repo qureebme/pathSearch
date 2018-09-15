@@ -3,7 +3,6 @@ classdef Edge
     properties
         node1
         node2
-        cost % the cost of traversing this edge 
     end
     
     methods
@@ -20,8 +19,10 @@ classdef Edge
         
         %the cost of traversing this edge only.
         %turning cost is not included.
-        function cost = getCost(self)
-            cost = self.getLength * self.cost;
+        function cost = edgeCost(self)
+            cost_per_unit = 1;
+            cost = self.getLength * cost_per_unit;
+            % cost_per_unit MUST already be in the workspace
         end
         
         function draw = draw(self)
