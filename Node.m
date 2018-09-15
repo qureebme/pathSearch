@@ -3,7 +3,9 @@ classdef Node
     properties
         coords
         hasNeighbours = false
-        neighbours = [] % location [x,y] ONLY
+        neighbours = [] % list of node locations [x,y] ONLY.
+                        % each neighboring node is added as a
+                        % new row.
     end
     
     methods

@@ -2,8 +2,8 @@ clc
 
 map_definition
 
-start_pt = [17 2]; % the start point
-dest = [2 20]; % the destination
+start_pt = [17 2];  % the start point
+dest = [2 20];      % the destination
 
 plot(start_pt(1),start_pt(2),'r*');
 plot(dest(1),dest(2),'bo');
@@ -15,19 +15,17 @@ n = input('How many other nodes do you want to create? ');
 
 % Initialize a cell of n+2 items where 
 % Node objects will be held
-Nodes{n+2} = Node(dest); % dest node as last object in the cell,
-Nodes{1} = Node(start_pt);% and start_pt as the first.
+Nodes{n+2} = Node(dest);   % dest node as last object in the cell,
+Nodes{1} = Node(start_pt); % and start_pt as the first.
 
 while numOfPts < n + 1
     randx = rand() * 30; % random x coordinate
     randy = rand() * 30; % random y coordinate
     
     if inpolygon(randx, randy, x_obstacle, y_obstacle) == 0
-        %plot(randx,randy,'b*');
         Node([randx,randy]).draw();
         numOfPts = numOfPts + 1;
         Nodes{numOfPts} = Node([randx, randy]); % first addition will be Nodes{2}
-    
     end
 
     pause(0.1);
@@ -43,15 +41,14 @@ end
          pt_2 = Nodes{i2}.coords;    % second point
          
          if isempty(polyxpoly([pt_1(1) pt_2(1)],[pt_1(2) pt_2(2)], x_obstacle, y_obstacle))
-             %plot([pt_1(1) pt_2(1)], [pt_1(2) pt_2(2)]) % plot the edge.*********
              Edge(Node(pt_1),Node(pt_2)).draw();
              
-             Nodes{i}.hasNeighbours = true; % obviously!!
-             Nodes{i2}.hasNeighbours = true;
+             Nodes{i}.hasNeighbours = true;
+             Nodes{i2}.hasNeighbours = true; % obviously!!
              
              % keep a record.
-             Nodes{i}.neighbours = [Nodes{i}.neighbours Nodes{i2}.coords];
-             Nodes{i2}.neighbours = [Nodes{i2}.neighbours Nodes{i}.coords];
+             Nodes{i}.neighbours = [Nodes{i}.neighbours; Nodes{i2}.coords];
+             Nodes{i2}.neighbours = [Nodes{i2}.neighbours; Nodes{i}.coords];
          end
          pause(0.1);
      end
