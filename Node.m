@@ -18,13 +18,12 @@ classdef Node < handle
             neighbours = self.neighbours;
         end
         
-        function update = updateCost(self, cost)
-            if self.cost == Inf %the node has never been checked out before
-                self.cost = cost;
-            else
-                self.cost = self.cost + cost;
-                update = [];
-            end
+        function update = updateCost(neighb_node, curr_node, total_cost)
+            % curr_node is the last node the pathObj
+            % neighb_node is a neighbour of curr_Node
+            % total_cost is the cost of going from curr_Node to neighb_node
+            neighb_node.cost = min(neighb_node.cost, curr_node.cost + total_cost);
+            update = [];
         end
         
         function checker = checkInPath(self, path)

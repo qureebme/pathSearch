@@ -1,5 +1,5 @@
-%clc
-%clear all
+clc
+clear all
 map_definition
 
 start_pt = [17 2];  % the start point

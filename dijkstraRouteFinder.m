@@ -1,12 +1,19 @@
 function dijkstraFinder = dijkstraRouteFinder(curr_Node, Nodes, pathObj, k)
-%DIJKSTRAROUTEFINDER Summary of this function goes here
-%   Detailed explanation goes here
+%DIJKSTRAROUTEFINDER
+%   This function finds the cheapest route from a given start node to a
+%   specified destination node. curr_Node has to be the start node as
+%   specified in Path object pathObj. Nodes is a cell array of Node objects,
+%   and k is the number of times this function has been called. k must be 1
+%   at the start node.
 
-LOS_vector = [-15 18];
-
+LOS_vector = [-15 18]; % line-of-sight vector that goes directly from 
+                        % the start point to the destination. It is assumed 
+                        % that the robot is initially facing this
+                        % direction.
 N = length(Nodes);
+e2 = length(pathObj.nodes);
 
-fprintf('curr_Node.coords : %.2f %.2f\n, k is: %d', curr_Node.coords,k);
+fprintf('curr_Node.coords : %.2f %.2f, and k is: %d', curr_Node.coords,k);
 %% NOW CALCULATE THE COST OF GOING FROM THE CURRENT NODE TO
 %   EACH OF ITS NEIGHBOURS
 
@@ -15,32 +22,31 @@ for d = 1:len % for each neighbour, compute the costs
     edge = Edge(curr_Node, curr_Node.neighbours(d));
     edge_cost = edge.edgeCost();
     
-    % k is the number of function calls
-    if k == 1 %on the start node... FIRST CALL ONLY'''''''''''''''''''''''''''''''''''''
-        % we will assume the robot is directly facing the destination at the beginning.
-        % therefore, turning is between the line-of-sight vector and edges
-        % that emanate from the start point.
+    if k == 1 %on the start node,
+        % the robot is directly facing the destination at the beginning.
+        % therefore, turning costs are incurred for turning between the 
+        % line-of-sight vector and edge vectors that emanate from the start
+        % point.
         
-        turning_cost = angl(LOS_vector, curr_Node.neighbours(d).coords-Nodes{1}.coords);
+        turning_cost = angl(LOS_vector, curr_Node.neighbours(d).coords-Nodes{k}.coords);
         
         total_cost = turning_cost + edge_cost;
-        curr_Node.neighbours(d).updateCost(total_cost);% update the cost to the checked node
+        curr_Node.neighbours(d).updateCost(pathObj.nodes(e2), total_cost); 
+            % update the cost to the checked neighbour
 
-    else % CALLS OTHER THAN THE FIRST..............................................
+    else % other than on the start node,
         e = length(pathObj.nodes);
         if e>30
             disp('ERRORRRRRRRRRRR');
             return;
         end
 
-        %q = pathObj.nodes(e).coords-pathObj.nodes(e-1).coords; % vector1
-
-        %fprintf('q is : %.2f %.2f\n', q);
-        %% turning_cost = angl(q, curr_Node.coords-pathObj.nodes(e).coords);
+        
         turning_cost = 0.5; % DEBUGGING
         total_cost = turning_cost + edge_cost;
-        if curr_Node.checkInPath(pathObj) == false % the current node is not in the path
-            curr_Node.neighbours(d).updateCost(total_cost); % update the cost to the checked node
+        if curr_Node.checkInPath(pathObj) == false % the current node is not already in the path
+            curr_Node.neighbours(d).updateCost(pathObj.nodes(e2), total_cost); 
+            % update the cost to the checked neighbour
         end
 
     end
