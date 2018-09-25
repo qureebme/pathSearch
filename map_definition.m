@@ -17,6 +17,8 @@ hold on
 x_buffer = pgon_buffer.Vertices(:,1);
 y_buffer = pgon_buffer.Vertices(:,2);
 
+ title('Robot Path Search: Dijkstra Algorithm');
+
 %clear pgon pgon_buffer
 %%
 

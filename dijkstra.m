@@ -12,9 +12,9 @@ numOfPts = 1; % number of points added to the map.
               % these points represent Node objects.
 
 n = input('How many other nodes do you want to create? ');
+%title('Robot Path Search: Dijkstra Algorithm with ',n, ' nodes');
 
-% Initialize a cell of n+2 items where 
-% Node objects will be held
+% Initialize a cell array of n+2 Node items 
 Nodes{n+2} = Node(dest);   % dest node as last object in the cell,
 Nodes{1} = Node(start_pt); % and start node as the first.
 
@@ -24,12 +24,13 @@ LOS_vector = [dest(1)-start_pt(1) dest(2)-start_pt(2)]; %line-of-sight vector
 % we will assume the robot is directly facing
 % the destination at the beginning.
                                              
-%% NOW WE COMPLETE THE CELL ARRAY OF NODES AS WE CREATE THEM
+%% NOW WE FILL UP THE CELL ARRAY OF NODES AS WE CREATE THEM
 
-while numOfPts < n + 1 %% 
+while numOfPts < n + 1 
+%     randx = randi([1 30]);% * 30; % random x coordinate
+%     randy = randi([1 30]);% * 30; % random y coordinate
     randx = rand() * 30; % random x coordinate
     randy = rand() * 30; % random y coordinate
-    
     if inpolygon(randx, randy, x_obstacle, y_obstacle) == 0
         Node([randx,randy]).draw();
         numOfPts = numOfPts + 1;
@@ -56,7 +57,7 @@ end
              Nodes{a}.neighbours = [Nodes{a}.neighbours, Nodes{b}];
              Nodes{b}.neighbours = [Nodes{b}.neighbours, Nodes{a}];
          end
-         pause(0.1);
+         %pause(0.1);
      end
 
  end

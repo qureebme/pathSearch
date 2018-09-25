@@ -13,7 +13,7 @@ LOS_vector = [-15 18]; % line-of-sight vector that goes directly from
 N = length(Nodes);
 e2 = length(pathObj.nodes);
 
-fprintf('curr_Node.coords : %.2f %.2f, and k is: %d', curr_Node.coords,k);
+%fprintf('curr_Node.coords : %.2f %.2f\n', curr_Node.coords);
 %% NOW CALCULATE THE COST OF GOING FROM THE CURRENT NODE TO
 %   EACH OF ITS NEIGHBOURS
 
@@ -28,58 +28,46 @@ for d = 1:len % for each neighbour, compute the costs
         % line-of-sight vector and edge vectors that emanate from the start
         % point.
         
-        turning_cost = angl(LOS_vector, curr_Node.neighbours(d).coords-Nodes{k}.coords);
+        % Here, Nodes{k} is the same as curr_Node
+        turning_cost = angl(LOS_vector, curr_Node.neighbours(d).coords-curr_Node.coords);
         
         total_cost = turning_cost + edge_cost;
         curr_Node.neighbours(d).updateCost(pathObj.nodes(e2), total_cost); 
             % update the cost to the checked neighbour
 
-    else % other than on the start node,
-        e = length(pathObj.nodes);
-        if e>30
+    else 
+        if e2 > 30
             disp('ERRORRRRRRRRRRR');
             return;
         end
-
+        turning_cost = angl(curr_Node.neighbours(d).coords-curr_Node.coords, ...
+            curr_Node.coords-pathObj.nodes(e2-1).coords);
         
-        turning_cost = 0.5; % DEBUGGING
         total_cost = turning_cost + edge_cost;
-        if curr_Node.checkInPath(pathObj) == false % the current node is not already in the path
+        
+        if curr_Node.neighbours(d).checkInPath(pathObj) == false % the current neighbouring node 
+                                                                 % is not already in the path
             curr_Node.neighbours(d).updateCost(pathObj.nodes(e2), total_cost); 
             % update the cost to the checked neighbour
         end
-
-    end
-    
-end
-%fprintf('turning cost: %.2f, edge cost: %.2f, k2: %.2f \n', turning_cost,edge_cost, k);
-
-% Now look at the costs at each neighbour, and choose the least of them,
-%  provided that the node is not already in the path
-
-for j2 = 1:len-1
-    for j3 = j2+1:len
-        if curr_Node.neighbours(j2).cost < curr_Node.neighbours(j3).cost
-            % Extra check to ensure this node hasn't been selected already
-            if curr_Node.neighbours(j2).checkInPath(pathObj) == false
-                next_Node = curr_Node.neighbours(j2);
-            end
-            
-        else
-            if curr_Node.neighbours(j3).checkInPath(pathObj) == false
-                next_Node = curr_Node.neighbours(j3);
-            end
-            
-        end
     end
 end
-% the last for-loop gives us the next node to search from
+%% Costs to the current Node's neighbours have now been updated.
+%  Next task is to select the cheapest to go through.
+
+next_Node = findLeastCostNode(curr_Node.neighbours, pathObj);
+%fprintf('next_Node is: %d %d\n', next_Node.coords);
+
 pathObj.addNode(next_Node);
-disp(pathObj);%%%dffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
-fprintf('length of path.nodes after node add: %d ', length(pathObj.nodes));
+%fprintf('length of path.nodes after node add: %d ', length(pathObj.nodes));
 k = k + 1; % increment k
-if next_Node.coords ~= Nodes{N}.coords
+%disp('Next node: ')
+%disp(next_Node)
+% fprintf('size of Next_Node.coords is: %d %d\n', size(next_Node.coords));
+% fprintf('size of Nodes{N}.coords is: %d %d\n\n', size(Nodes{N}.coords));
+if (next_Node.coords(1) ~= Nodes{N}.coords(1)) && ... 
+        (next_Node.coords(2) ~= Nodes{N}.coords(2))% not at destination yet?
     dijkstraFinder = dijkstraRouteFinder(next_Node, Nodes, pathObj, k);
 else
     %% WE HAVE arrived at the destination. SHOW IT!!

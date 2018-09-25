@@ -4,8 +4,7 @@ classdef Node < handle
         coords
         hasNeighbours = false
         cost = Inf
-        neighbours = [] % list of neighbouring nodes
-                        
+        neighbours = [] % list of neighbouring nodes                   
     end
     
     methods
@@ -15,24 +14,28 @@ classdef Node < handle
         end
         
         function neighbours = showNeighbours(self)
-            neighbours = self.neighbours;
+            for i = 1:length(self.neighbours)
+                neighbours = disp(self.neighbours(i));
+            end
         end
         
         function update = updateCost(neighb_node, curr_node, total_cost)
             % curr_node is the last node the pathObj
-            % neighb_node is a neighbour of curr_Node
+            % neighb_node is a neighbour of curr_Node. We're currently
+            % analysing this neighbour.
             % total_cost is the cost of going from curr_Node to neighb_node
             neighb_node.cost = min(neighb_node.cost, curr_node.cost + total_cost);
             update = [];
         end
         
         function checker = checkInPath(self, path)
-            %CHECKINPATH Summary of this function goes here
-            %   Detailed explanation goes here
             answer = false;
-            for p = 1:length(path)
+            for p = 1:length(path.nodes)
+                %d = self.coords == path.nodes(p).coords;
+                %fprintf('p is: %d, d1 is: %d, d2 is: %d',p,d(1),d(2));
                 if self.coords == path.nodes(p).coords
                     answer = true; % the node is already in the path
+                    break;
                 end
             end
             checker = answer;
