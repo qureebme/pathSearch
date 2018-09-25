@@ -28,7 +28,8 @@ for d = 1:len % for each neighbour, compute the costs
         % line-of-sight vector and edge vectors that emanate from the start
         % point.
         
-        % Here, Nodes{k} is the same as curr_Node
+        % turning cost is the angle between the LOS vector and a vector
+        % directed from the current node to a neighbour.
         turning_cost = angl(LOS_vector, curr_Node.neighbours(d).coords-curr_Node.coords);
         
         total_cost = turning_cost + edge_cost;
@@ -36,42 +37,38 @@ for d = 1:len % for each neighbour, compute the costs
             % update the cost to the checked neighbour
 
     else 
-        if e2 > 30
-            disp('ERRORRRRRRRRRRR');
-            return;
-        end
+        
         turning_cost = angl(curr_Node.neighbours(d).coords-curr_Node.coords, ...
             curr_Node.coords-pathObj.nodes(e2-1).coords);
         
+        % turning cost
         total_cost = turning_cost + edge_cost;
         
         if curr_Node.neighbours(d).checkInPath(pathObj) == false % the current neighbouring node 
                                                                  % is not already in the path
             curr_Node.neighbours(d).updateCost(pathObj.nodes(e2), total_cost); 
-            % update the cost to the checked neighbour
+            % update the cost to the checked neighbour, if necessary
         end
     end
 end
 %% Costs to the current Node's neighbours have now been updated.
-%  Next task is to select the cheapest to go through.
+%  Next task is to select the cheapest of them to go through.
 
 next_Node = findLeastCostNode(curr_Node.neighbours, pathObj);
 %fprintf('next_Node is: %d %d\n', next_Node.coords);
 
-pathObj.addNode(next_Node);
+pathObj.addNode(next_Node); % new node is included in the path
 
-%fprintf('length of path.nodes after node add: %d ', length(pathObj.nodes));
-k = k + 1; % increment k
+k = k + 1; % increment the iteration count
 %disp('Next node: ')
 %disp(next_Node)
-% fprintf('size of Next_Node.coords is: %d %d\n', size(next_Node.coords));
-% fprintf('size of Nodes{N}.coords is: %d %d\n\n', size(Nodes{N}.coords));
-if (next_Node.coords(1) ~= Nodes{N}.coords(1)) && ... 
-        (next_Node.coords(2) ~= Nodes{N}.coords(2))% not at destination yet?
+
+if ((next_Node.coords(1) ~= Nodes{N}.coords(1)) && ... 
+        (next_Node.coords(2) ~= Nodes{N}.coords(2)))% not at destination yet?
     dijkstraFinder = dijkstraRouteFinder(next_Node, Nodes, pathObj, k);
 else
     %% WE HAVE arrived at the destination. SHOW IT!!
-    disp('WE HAVE arrived at the destination');
+    fprintf('WE HAVE arrived at the destination\n');
     dijkstraFinder = pathObj.draw();
 end
 
