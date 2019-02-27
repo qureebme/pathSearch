@@ -13,8 +13,8 @@ end
 array2(1) = ''; % remove the first (dummy) Node object
 % array2 now contains members of nodeArray which aren't already in the path
 if length(array2) == 0
-    fprintf('There is no viable path to the destination.\n');
-    fprintf('Please run the program again or increase the number of nodes.\n');
+    fprintf('The optimal path cannot contain a loop.\n');
+    fprintf('Search Terminated!.\n');
     pathObj.draw();
     leastCostNode = [];
     return;

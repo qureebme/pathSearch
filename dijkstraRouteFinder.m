@@ -33,7 +33,7 @@ for d = 1:len % for each neighbour, compute the costs
         
         % turning cost is the angle between the LOS vector and a vector
         % directed from the current node to a neighbour.
-        turning_cost = 0; %angl(LOS_vector, curr_Node.neighbours(d).coords-curr_Node.coords);
+        turning_cost = angl(LOS_vector, curr_Node.neighbours(d).coords-curr_Node.coords);
         
         total_cost = turning_cost + edge_cost;
         curr_Node.neighbours(d).updateCost(pathObj.nodes(pathLength), total_cost, pathObj); 
@@ -41,8 +41,8 @@ for d = 1:len % for each neighbour, compute the costs
 
     else
         
-        turning_cost = 0; %angl(curr_Node.neighbours(d).coords-curr_Node.coords, ...
-            %curr_Node.coords-pathObj.nodes(e2-1).coords);
+        turning_cost = angl(curr_Node.neighbours(d).coords-curr_Node.coords, ...
+            curr_Node.coords-pathObj.nodes(pathLength-1).coords);
         
         total_cost = turning_cost + edge_cost;
         
