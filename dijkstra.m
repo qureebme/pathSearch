@@ -6,7 +6,7 @@ start_pt = [17 2];  % the start point
 dest = [2 20];      % the destination
 
 plot(start_pt(1),start_pt(2),'r*');
-plot(dest(1),dest(2),'bo');
+plot(dest(1),dest(2),'g*');
 
 numOfPts = 1; % number of points added to the map.
               % these points represent Node objects.

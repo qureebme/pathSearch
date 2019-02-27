@@ -39,7 +39,7 @@ classdef Path < handle
                           self.nodes(j).coords(2)-self.nodes(i).coords(2),0,...
                       'r-','LineWidth',2);
                   hold on;
-                  pause(0.5);
+                  %pause(0.5);
                     break;
                 end
             end

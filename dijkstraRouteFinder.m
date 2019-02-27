@@ -11,7 +11,7 @@ LOS_vector = [-15 18]; % line-of-sight vector that goes directly from
                         % that the robot is initially facing this
                         % direction.
 N = length(Nodes);
-e2 = length(pathObj.nodes);
+pathLength = length(pathObj.nodes);
 
 %fprintf('curr_Node.coords : %.2f %.2f\n', curr_Node.coords);
 %% NOW CALCULATE THE COST OF GOING FROM THE CURRENT NODE TO
@@ -19,9 +19,12 @@ e2 = length(pathObj.nodes);
 
 len = length(curr_Node.neighbours); % num of curr_Node's neighbours
 for d = 1:len % for each neighbour, compute the costs
+    
+    % edge cost
     edge = Edge(curr_Node, curr_Node.neighbours(d));
     edge_cost = edge.edgeCost();
     
+    % turning cost
     if k == 1 %on the start node,
         % the robot is directly facing the destination at the beginning.
         % therefore, turning costs are incurred for turning between the 
@@ -30,24 +33,24 @@ for d = 1:len % for each neighbour, compute the costs
         
         % turning cost is the angle between the LOS vector and a vector
         % directed from the current node to a neighbour.
-        turning_cost = angl(LOS_vector, curr_Node.neighbours(d).coords-curr_Node.coords);
+        turning_cost = 0; %angl(LOS_vector, curr_Node.neighbours(d).coords-curr_Node.coords);
         
         total_cost = turning_cost + edge_cost;
-        curr_Node.neighbours(d).updateCost(pathObj.nodes(e2), total_cost); 
+        curr_Node.neighbours(d).updateCost(pathObj.nodes(pathLength), total_cost, pathObj); 
             % update the cost to the checked neighbour
 
-    else 
+    else
         
-        turning_cost = angl(curr_Node.neighbours(d).coords-curr_Node.coords, ...
-            curr_Node.coords-pathObj.nodes(e2-1).coords);
+        turning_cost = 0; %angl(curr_Node.neighbours(d).coords-curr_Node.coords, ...
+            %curr_Node.coords-pathObj.nodes(e2-1).coords);
         
-        % turning cost
         total_cost = turning_cost + edge_cost;
         
-        if curr_Node.neighbours(d).checkInPath(pathObj) == false % the current neighbouring node 
-                                                                 % is not already in the path
-            curr_Node.neighbours(d).updateCost(pathObj.nodes(e2), total_cost); 
-            % update the cost to the checked neighbour, if necessary
+        if curr_Node.neighbours(d).checkInPath(pathObj) == false 
+            %if the current neighbouring node is not already in the path,
+            
+            curr_Node.neighbours(d).updateCost(pathObj.nodes(pathLength), total_cost, pathObj); 
+            % update the cost to this neighbour, if necessary (necessity is checked in Node.updateCost(...))
         end
     end
 end

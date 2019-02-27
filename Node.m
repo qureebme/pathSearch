@@ -19,12 +19,18 @@ classdef Node < handle
             end
         end
         
-        function update = updateCost(neighb_node, curr_node, total_cost)
+        function update = updateCost(neighb_node, curr_node, total_cost, path)
             % curr_node is the last node added to pathObj
             % neighb_node is a neighbour of curr_Node. We're currently
-            % analysing this neighbour.
+            % checking this neighbour.
             % total_cost is the cost of going from curr_Node to neighb_node
-            neighb_node.cost = min(neighb_node.cost, curr_node.cost + total_cost);
+            
+            % However, this cost need not be updated if the checked node
+            % is already along the path.
+            if (neighb_node.checkInPath(path) == false)
+                neighb_node.cost = min(neighb_node.cost, curr_node.cost + total_cost);
+            end
+            
             update = [];
         end
         
@@ -40,7 +46,7 @@ classdef Node < handle
         end
         
         function draw = draw(self)
-            draw = plot(self.coords(1), self.coords(2), 'b*');
+            draw = plot(self.coords(1), self.coords(2), 'bo');
         end
         
     end
