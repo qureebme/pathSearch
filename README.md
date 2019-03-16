@@ -22,5 +22,6 @@ turning cost = the change in angular direction (in radian) between two consecuti
           The higher this factor, the higher the penalty on turning.
           
 main file: dijkstra.m
+CAUTION: This code is incomplete, so it doesn't always find a path, even though one might exist. Fixing...
 
 Language: MATLAB
